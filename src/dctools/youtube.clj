@@ -2,7 +2,7 @@
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [camel-snake-kebab.core :as csk]
-            [clojure.string :as str]))
+            [clojure.string :refer [join]]))
 
 (defn http-get [url options]
   (let [{:keys [body error]} @(http/get url options)]
@@ -30,20 +30,33 @@
 (defn playlist-video-ids [youtube-key playlist-id]
   (->> (call "playlistItems" {:part       "contentDetails"
                               :playlistId playlist-id
+                              :maxResults 50
                               :key        youtube-key})
        :items
        (keep #(get-in % [:contentDetails :videoId]))
-       (str/join ",")))
+       (join ",")))
 
 (defn raw-playlist-items [youtube-key playlist-id]
-  (let [video-ids (->> (call "playlistItems" {:part       "contentDetails"
-                                              :playlistId playlist-id
-                                              :key        youtube-key})
-                       :items
-                       (keep #(get-in % [:contentDetails :videoId]))
-                       (str/join ","))]
+  (let [video-ids (playlist-video-ids youtube-key playlist-id)]
     (raw-video-info youtube-key video-ids)))
 
 (defn get-playlist [youtube-key playlist-id]
   (-> (raw-playlist youtube-key playlist-id)
       (assoc :items (raw-playlist-items youtube-key playlist-id))))
+
+(defn youtube-video->lesson [{:keys [snippet id]}]
+  {:type        :lesson
+   :youtube-id  id
+   :title       (get snippet :title)
+   :description (get snippet :description)
+   :keywords    (join ", " (get snippet :tags))
+   :url-title   (csk/->kebab-case (get snippet :title))})
+
+(defn youtube-playlist->topic [{:keys [items] :as playlist}]
+  {:type    :topic
+   :title   (get-in playlist [:snippet :title])
+   :lessons (map youtube-video->lesson items)})
+
+(defn topic-from-playlist [youtube-key playlist-id]
+  (-> (get-playlist youtube-key playlist-id)
+      (youtube-playlist->topic)))
