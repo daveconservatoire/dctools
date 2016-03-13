@@ -337,12 +337,12 @@ The melody is perhaps the most important element of any piece of music and so co
     :urltitle       "reading-music"}])
 
 (def db-pitch-topic
-  [{:colour    "#000000"
-    :courseid  7
-    :id        3
-    :sortorder 2
-    :title     "Pitch"
-    :urltitle  "pitch"}])
+  {:colour    "#000000"
+   :courseid  7
+   :id        3
+   :sortorder 2
+   :title     "Pitch"
+   :urltitle  "pitch"})
 
 (def db-pitch-lessons
   [{:description ""

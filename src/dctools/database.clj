@@ -6,11 +6,9 @@
    "p" :playlist
    "e" :exercice})
 
-(defqueries "queries.sql"
-  {:connection {:subprotocol "mysql"
-                :subname     "//127.0.0.1:8889/dcsite?zeroDateTimeBehavior=convertToNull"
-                :user        "root"
-                :password    "root"}})
+(def ^:dynamic *db-settings* {})
+
+(defqueries "queries.sql")
 
 (defn parse-lesson [row]
   {:type        (get type-map (get row :filetype))
@@ -21,6 +19,9 @@
    :url-title   (get row :urltitle)
    :youtube-id  (get row :youtubeid)})
 
+(defn topic-by-title [title]
+  (first (sql-topic-by-title title {:connection *db-settings*})))
+
 (defn topic-lessons [title]
-  (->> (sql-topic-lessons {:title title})
+  (->> (sql-topic-lessons {:title title} {:connection *db-settings*})
        (map parse-lesson)))
