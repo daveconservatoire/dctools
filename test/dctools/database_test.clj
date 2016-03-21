@@ -3,25 +3,19 @@
             [dctools.database :refer :all]
             [dctools.fixtures :as fx]))
 
-(def db-settings
-  {:subprotocol "mysql"
-   :subname     "//127.0.0.1:8889/dcsite?zeroDateTimeBehavior=convertToNull"
-   :user        "root"
-   :password    "root"})
-
 (deftest test-sql-get-courses
-  (is (= (sql-get-courses {} {:connection db-settings})
+  (is (= (sql-get-courses {} {:connection fx/db-settings})
          fx/db-courses)))
 
 (deftest test-sql-topic-by-title
-  (binding [*db-settings* db-settings]
-    (is (= (topic-by-title {:title "Pitch"})
+  (binding [*db-settings* fx/db-settings]
+    (is (= (topic-by-title "Pitch")
            fx/db-pitch-topic))
 
-    (is (nil? (topic-by-title {:title "Invalid"})))))
+    (is (nil? (topic-by-title "Invalid")))))
 
 (deftest test-sql-topic-lessons
-  (is (= (->> (sql-topic-lessons {:title "Pitch"} {:connection db-settings})
+  (is (= (->> (sql-topic-lessons {:title "Pitch"} {:connection fx/db-settings})
               (take 2))
          fx/db-pitch-lessons)))
 

@@ -20,11 +20,13 @@
 
 (defn reconcile-lessons [db-lessons lessons]
   (let [db-lessons (filter #(= :lesson (:type %)) db-lessons)]
-    {:add    (detect-added-by :youtube-id db-lessons lessons)
-     :update (conflicted-entries db-lessons lessons)
-     :remove (detect-added-by :youtube-id lessons db-lessons)}))
+    (concat
+      (map (partial vector :add) (detect-added-by :youtube-id db-lessons lessons))
+      (map (partial vector :update) (conflicted-entries db-lessons lessons))
+      (map (partial vector :remove) (detect-added-by :youtube-id lessons db-lessons)))))
 
-(defn playlist->topic [playlist-id]
-  (let [{:keys [title lessons] :as topic} (yt/topic-from-playlist youtube-key playlist-id)
+(defn import-topic [{:keys [title lessons] :as topic}]
+  (let [{:keys [id]} (db/topic-by-title title)
         db-lessons (db/topic-lessons title)]
-    (reconcile-lessons db-lessons lessons)))
+    (cond-> (reconcile-lessons db-lessons lessons)
+      (not id) (conj [:create-topic title]))))

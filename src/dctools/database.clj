@@ -20,7 +20,7 @@
    :youtube-id  (get row :youtubeid)})
 
 (defn topic-by-title [title]
-  (first (sql-topic-by-title title {:connection *db-settings*})))
+  (first (sql-topic-by-title {:title title} {:connection *db-settings*})))
 
 (defn topic-lessons [title]
   (->> (sql-topic-lessons {:title title} {:connection *db-settings*})

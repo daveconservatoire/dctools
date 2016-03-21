@@ -1,6 +1,7 @@
 (ns dctools.core-test
   (:require [clojure.test :refer :all]
             [dctools.core :refer :all]
+            [dctools.database :as db]
             [dctools.fixtures :as fx]))
 
 (def pitch-and-octaves
@@ -15,45 +16,44 @@
   (testing "blank case"
     (is (= (reconcile-lessons []
                               [])
-           {:add    []
-            :update []
-            :remove []})))
+           [])))
 
   (testing "new data"
     (is (= (reconcile-lessons []
                               [pitch-and-octaves])
-           {:add    [pitch-and-octaves]
-            :update []
-            :remove []})))
+           [[:add pitch-and-octaves]])))
 
   (testing "don't add when it's already present"
     (is (= (reconcile-lessons [(assoc pitch-and-octaves
                                  :id "123")]
                               [pitch-and-octaves])
-           {:add    []
-            :update []
-            :remove []})))
+           [])))
 
   (testing "updating"
     (let [updated-lesson (assoc pitch-and-octaves
                            :title "New Title")]
       (is (= (reconcile-lessons [pitch-and-octaves]
                                 [updated-lesson])
-             {:add    []
-              :update [{:new updated-lesson
-                        :old pitch-and-octaves}]
-              :remove []}))))
+             [[:update {:new updated-lesson
+                        :old pitch-and-octaves}]]))))
 
   (testing "removing"
     (is (= (reconcile-lessons [pitch-and-octaves]
                               [])
-           {:add    []
-            :update []
-            :remove [pitch-and-octaves]})))
+           [[:remove pitch-and-octaves]])))
 
   (testing "discard non-lessons"
     (is (= (reconcile-lessons [{}]
                               [])
-           {:add    []
-            :update []
-            :remove []}))))
+           []))))
+
+(deftest test-import-topic
+  (binding [db/*db-settings* fx/db-settings]
+    (is (= (->> (import-topic fx/pitch-topic)
+                (map first))
+           [:update :update :update :update]))
+
+    (let [response (import-topic (assoc fx/pitch-topic :title "Another"))]
+      (is (= (first response) [:create-topic "Another"]))
+      (is (= (map first response)
+             [:create-topic :add :add :add :add])))))

@@ -1,6 +1,12 @@
 (ns dctools.fixtures
   (:require [dctools.database :as db]))
 
+(def db-settings
+  {:subprotocol "mysql"
+   :subname     "//127.0.0.1:8889/dcsite?zeroDateTimeBehavior=convertToNull"
+   :user        "root"
+   :password    "root"})
+
 (def youtube-pitch-playlist
   {:etag     "\"q5k97EMVGxODeKcDgp8gnMu79wM/4eh4SMi7riOvCsFNLaan3yQ2vmw\""
    :items    [{:contentDetails {:itemCount 4}
