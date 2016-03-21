@@ -11,4 +11,4 @@
   (binding [db/*db-settings* db-credentials]
     (let [playlist-items (db/playlist-items)
           missing-ids (yt/get-missing-videos youtube-key (map :youtubeid playlist-items))]
-      missing-ids)))
+      (filter #(missing-ids (:youtubeid %)) playlist-items))))
