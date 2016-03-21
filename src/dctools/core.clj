@@ -30,3 +30,7 @@
         db-lessons (db/topic-lessons title)]
     (cond-> (reconcile-lessons db-lessons lessons)
       (not id) (conj [:create-topic title]))))
+
+(defn find-missing-playlist-videos [playlist-items]
+  )
+

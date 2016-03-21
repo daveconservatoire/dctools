@@ -2,6 +2,7 @@
   (:require [org.httpkit.client :as http]
             [clojure.data.json :as json]
             [camel-snake-kebab.core :as csk]
+            [clojure.set :as set]
             [clojure.string :refer [join]]))
 
 (defn http-get [url options]
@@ -27,7 +28,7 @@
                       :key  youtube-key})
       :items))
 
-(defn playlist-video-ids [youtube-key playlist-id]
+(defn get-playlist-video-ids [youtube-key playlist-id]
   (->> (call "playlistItems" {:part       "contentDetails"
                               :playlistId playlist-id
                               :maxResults 50
@@ -36,8 +37,28 @@
        (keep #(get-in % [:contentDetails :videoId]))
        (join ",")))
 
+(defn get-missing-videos [youtube-key video-ids]
+  "This function efficiently detecteds offline videos. The calls are batched in requests
+  of 50 items per time (this is the max allowed by Youtube). For example, to check on
+  225 items it makes 5 requests."
+  (let [page-size 50]
+    (loop [remaining video-ids
+           valid-acc []]
+      (let [[current rest] (split-at page-size remaining)
+            valid-acc (concat
+                        valid-acc
+                        (->> (call "videos" {:part       "id"
+                                             :id         (join "," current)
+                                             :key        youtube-key
+                                             :maxResults page-size})
+                             :items
+                             (map :id)))]
+        (if (seq rest)
+          (recur rest valid-acc)
+          (set/difference (set video-ids) (set valid-acc)))))))
+
 (defn raw-playlist-items [youtube-key playlist-id]
-  (let [video-ids (playlist-video-ids youtube-key playlist-id)]
+  (let [video-ids (get-playlist-video-ids youtube-key playlist-id)]
     (raw-video-info youtube-key video-ids)))
 
 (defn get-playlist [youtube-key playlist-id]

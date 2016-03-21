@@ -256,21 +256,21 @@ Visit http://www.daveconservatoire.org to watch hundreds of free video music les
    :youtube-id  "aDutr6g8SeY"})
 
 (def database-example
-  {:type :course
-   :title "Music: A Beginner's Guide"
-   :topics [{:type :topic
-             :title "Getting Started"
-             :lessons [{:type :lesson
+  {:type   :course
+   :title  "Music: A Beginner's Guide"
+   :topics [{:type    :topic
+             :title   "Getting Started"
+             :lessons [{:type  :lesson
                         :title "Getting Started"}]}
 
-            {:type :topic
-             :title "Pitch"
-             :lessons [{:type :lesson
-                        :youtube-id "aDutr6g8SeY"
-                        :title "Pitch and Octaves"
+            {:type    :topic
+             :title   "Pitch"
+             :lessons [{:type        :lesson
+                        :youtube-id  "aDutr6g8SeY"
+                        :title       "Pitch and Octaves"
                         :description "Pitch refers to how high or low a sound is. We have a good sense of what high and low pitched sound are, even if we've not spoken about them in this way.  \n\nAll sounds are created when an object vibrates and the pitch of a sound depends on the pitch of this vibration.  The faster the vibration the higher in pitch the sound.  \n\nIf we double the speed of vibration (or frequency) of a sound then something interesting happens.  The two pitches will sound similar and will blend together well.  This special relationship is known as an octave and is a central part of almost all music around the world.  \n\n\n"
-                        :keywords "pitch, frequency, what is pitch, octaves, octave, octave relationship"
-                        :url-title "pitch-and-octaves"}]}]})
+                        :keywords    "pitch, frequency, what is pitch, octaves, octave, octave relationship"
+                        :url-title   "pitch-and-octaves"}]}]})
 
 (def pitch-topic
   {:lessons [{:description "Pitch refers to how high or low a sound is.  We have a good sense of what high and low pitched sound are, even if we've not spoken about them in this way.  
@@ -382,3 +382,40 @@ If we double the speed of vibration (or frequency) of a sound then something int
     :youtubeid   "aDutr6g8SeY"}])
 
 (def db-pitch-lessons-normalized (map db/parse-lesson db-pitch-lessons))
+
+(def db-playlist-items
+  [{:credit    "kedarvideo"
+    :id        2
+    :relid     11
+    :sort      1
+    :text      "Now these are some serious drums!  Taiko drums originate in Japan where they were used by the Japanese army to help set a marching pace for the soldiers.  Taiko ensembles like this have only been around for about fifty years or so, but they can put on some incredibly impressive displays of both physical agility and rhythmic precision. "
+    :title     "Taiko Drums"
+    :youtubeid "fWg6OLqHlNM"}
+   {:credit    "mrmaxairistas"
+    :id        3
+    :relid     11
+    :sort      1
+    :text      "This video features Gary Burton, one of the world's leading vibraphone players.  With the help of four mallets Gary is able to produce shimmering melodies and harmonies on his instrument.  The music is <i>Libertango</i> by Argentinian composer Astor Piazzolla."
+    :title     "Jazz Vibes"
+    :youtubeid "Kxtr86zmYbk"}
+   {:credit    "pihdrummer"
+    :id        4
+    :relid     11
+    :sort      1
+    :text      "This is Dennis Chambers, one of my favourite jazz drummers.  In this solo, Dennis keeps things interesting combining complex rhythms with the full range of sounds on his kit.  You'll hear sections in this piece where there is a clear beat, and others where the beat is much freer.  Controlling the groove in this way is central to jazz drumming style. "
+    :title     "Dennis Solo"
+    :youtubeid "YdwCf2xIxOo"}
+   {:credit    "igiwarcraft"
+    :id        5
+    :relid     41
+    :sort      1
+    :text      "In these sections, I'll be producing a playlist of videos that will illustrate the points I make in each lesson.  One of the fantastic things about exploring music, is that we need to do lots of listening, something you probably already do for fun!  Here we see vibrations passing through a string, they are much easier to see in slow motion.  These vibrations eventually reach our ears via the body of the instrument and the air around us.  "
+    :title     "Vibrating String"
+    :youtubeid "oyLfCPNf_hE"}
+   {:credit    "thissiteishorrible"
+    :id        6
+    :relid     41
+    :sort      2
+    :text      "While we can see a guitar string vibrating, vibrations in other instruments are not so clear until we really slow them down.  This is a cymbal being hit in super slow motion, you can see the waves of energy passing through the metal as the cymbal bends out of shape."
+    :title     "Vibrating Cymbal"
+    :youtubeid "tBZ8o0Kiz6w"}])

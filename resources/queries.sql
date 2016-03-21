@@ -13,3 +13,8 @@ SELECT Lesson.*
 FROM Lesson
 LEFT JOIN Topic ON Lesson.topicno = Topic.id
 WHERE Topic.title = :title;
+
+-- name: sql-playlist-items
+SELECT PlaylistItem.*
+FROM PlaylistItem
+ORDER BY id

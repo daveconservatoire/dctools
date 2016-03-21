@@ -20,7 +20,7 @@
 
 (deftest test-playlist-video-ids
   (vcr :playlist-video-ids
-    (is (= (playlist-video-ids youtube-key "PLaitaNxyd8SGtC20Xi6eo-Rpka3XcIFwj")
+    (is (= (get-playlist-video-ids youtube-key "PLaitaNxyd8SGtC20Xi6eo-Rpka3XcIFwj")
            "aDutr6g8SeY,nVkeCH3GA9s,hPou3ube_Rg,WESQHuwOizM"))))
 
 (deftest test-raw-playlist-items
@@ -40,3 +40,8 @@
 (deftest test-youtube-playlist->topic
   (is (= (youtube-playlist->topic fx/pitch-playlist-with-items)
          fx/pitch-topic)))
+
+(deftest test-get-missing-videos
+  (vcr :get-missing-videos
+    (is (= (get-missing-videos youtube-key ["oyLfCPNf_hE" "tBZ8o0Kiz6w" "qj9QlWltv8s" "0UjsXo9l6I8" "N-dzfI3L5ic"])
+           #{"0UjsXo9l6I8"}))))

@@ -25,3 +25,6 @@
 (defn topic-lessons [title]
   (->> (sql-topic-lessons {:title title} {:connection *db-settings*})
        (map parse-lesson)))
+
+(defn playlist-items []
+  (sql-playlist-items {} {:connection *db-settings*}))

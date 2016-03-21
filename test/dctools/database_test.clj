@@ -19,6 +19,11 @@
               (take 2))
          fx/db-pitch-lessons)))
 
+(deftest test-sql-playlist-items
+  (binding [*db-settings* fx/db-settings]
+    (is (= (take 5 (playlist-items))
+           fx/db-playlist-items))))
+
 (deftest test-db->lesson
   (is (= (parse-lesson {:description "Pitch refers to how high or low a sound is."
                         :filetype    "l"
