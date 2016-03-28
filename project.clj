@@ -9,4 +9,5 @@
                  [camel-snake-kebab "0.3.2"]
                  [yesql "0.5.2"]
                  [mysql/mysql-connector-java "5.1.32"]
-                 [com.gfredericks/vcr-clj "0.4.6"]])
+                 [com.gfredericks/vcr-clj "0.4.6"]
+                 [org.clojure/tools.cli "0.3.3"]])

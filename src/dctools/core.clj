@@ -3,9 +3,6 @@
             [dctools.database :as db]
             [clojure.edn :as edn]))
 
-(def credentials (edn/read-string (slurp "credentials.edn")))
-(def youtube-key (get-in credentials [:youtube :api-key]))
-
 (defn detect-added-by [identity a b]
   (let [index-set (set (map identity a))]
     (remove #(contains? index-set (identity %)) b)))
